@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>oop</title>
+</head>
+<body>
+    <form action=""method="post">
+        <span id="error"></span>
+    <input type="text" name="username" id="userdata" placeholder="please enter"><br>
+    <input type="text" name="lname" id="lname"><br>
+    <input type="password" name="password" id="password">
+    <button type="button" id="submit">Submit</button>
+</form>
+
+<script>
+    class Person{
+        constructor(name,lname,password){
+         this.name = name
+         this.lname=lname
+         this.password=password   
+        }
+        validate(username, lname, password){
+            if(username.length == 0 || lname.length == 0 || password.length==0){
+                return"field should not be empty"
+            }
+
+            let userinfo =[]
+            let userprofile = {}
+            let username_pattern = /[a-z]{3}\W$/i
+            let lname_pattern = /[a-z]/i
+            let password_pattern =/\d{4}/
+            if(username_pattern.test(username) && lname_pattern.test(lname) && password_pattern.test(password)){
+                //retrieve stored data
+                let userdata = JSON.parse(localStorage.getItem("userdata"))
+                if(userdata == null || undefined){
+                    userprofile['username'] = username
+                    userprofile['password'] = password
+                    userprofile['lname']= lname
+                    userinfo.push(userprofile)
+                   // store data
+                    localStorage.setItem("userdata",JSON.stringify(userinfo))
+                }else{
+                    //check if username already exists
+                    let userExists = userdata.some(user => user.username === username)    
+                    if (userExists)  {
+                        return "Username already exist"
+                    }  else{
+                    userprofile['username'] = username
+                    userprofile['password'] = password
+                    userprofile['lname']= lname
+                    userdata.push(userprofile)
+                    localStorage.setItem("userdata",JSON.stringify(userdata))
+                    console.log(userdata);
+     
+                } 
+                  }
+                }else{
+                    return "user input failed"
+                }
+               // if(userdata == null || undefined){
+                    //userprofile['username'] = username
+                    //userprofile['password'] = password
+                   // userprofile['lname']= lname
+                 //   userinfo.push(userprofile)
+                    // store data
+                //     localStorage.setItem("userdata",JSON.stringify(userinfo))
+                // }                // }
+                //console.log
+
+            }
+            biography(age){
+            console.log(`my name is ${this.name} ${this.lname} and i am ${age}`);
+        }
+        eduHistory(){
+            console.log(`my name is ${this.name} and i am a student at ${this.school}`);
+        }
+        }
+
+        let submit = document.getElementById("submit")
+        submit.addEventListener("click", function(){
+            let errormsg = document.getElementById("error")
+            let username = document.getElementById("userdata").value.trim()
+            let lname = document.getElementById("lname").value.trim()
+            let password = document.getElementById("password").value.trim()
+            let user1 = new Person(username, lname, password)
+            let msg = user1.validate(username, lname, password)
+            errormsg.textContent = msg
+            console.log(errormsg);
+
+            //let user1 = new person(username, lname, password
+            //)
+        })
+       
+
+</script>
+</body>
+</html>
